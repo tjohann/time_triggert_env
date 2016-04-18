@@ -24,7 +24,7 @@
 */
 
 #include "conf_sched.h"
-
+#include "helper.h"
 
 static void
 function_1()
@@ -108,7 +108,8 @@ fiber_element_t fiber_array[] =
 int
 main(int argc, char *argv[])
 {
-
+	show_clock_resolution();
+	
 	if (build_sched_table(fiber_array, num_fiber_elements) != 0) {
 		printf("Could not build_sched_table\n");
 		exit (EXIT_FAILURE);

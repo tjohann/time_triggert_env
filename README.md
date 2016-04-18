@@ -69,3 +69,11 @@ Possible upgrades
 -----------------
 
 A possible extention would be to assign a fiber to a specific cpu. Another extention would be to use real threads instead of fiber. With that extentions its possible to use SCHED_RR or better SCHED_DEADLINE.
+
+
+Test environment
+----------------
+
+Actually i use a linux distribution (of course void-linux -> http://www.voidlinux.eu/) with PREEMPT kernel on a imx233 from olimex (https://www.olimex.com/Products/OLinuXino/iMX233/iMX233-OLinuXino-MINI/open-source-hardware). It has a single arm926te processor@454MHz. For further testing (with trace-cmd) i will also use a board from olimex (https://www.olimex.com/Products/SOM/A20/A20-SOM-EVB/open-source-hardware). It has a dual-core armv7hf processor@1GHz. I support that device with a RT-PREEMPT patched kernel via my a20_sdk (https://github.com/tjohann/a20_sdk). 
+
+Finally i also want to use FreeBSD on it and check the realtime capabilities of it. 

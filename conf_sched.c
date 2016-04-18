@@ -78,7 +78,7 @@ build_sched_table(fiber_element_t fiber_array[], int count)
 					 fiber,
 					 (void *) &fiber_array[i]);
 		if (ret != 0) {
-			printf("pthread_create \n");
+			printf("pthread_create\n");
 			return -1;
 		}
 	}
@@ -99,7 +99,7 @@ set_sched_props(fiber_element_t fiber_array[], int count)
 
 		if (sched_setscheduler(fiber->kernel_tid, SCHED_FIFO,
 				       &fiber->sched_param)) {
-			printf("could not set scheduling policy SCHED_FIFO");
+			printf("could not set scheduling policy SCHED_FIFO\n");
 			return -1;
 		}
 	}

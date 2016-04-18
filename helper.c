@@ -23,64 +23,16 @@
   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef _CONF_SCHED_H_
-#define _CONF_SCHED_H_
 
-#ifndef __USE_GNU
-#define __USE_GNU
-#endif
-#define _GNU_SOURCE
+#include "helper.h"
 
-// more or less common inc
-#include <stdio.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/ioctl.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdarg.h>
-#include <stddef.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <string.h>
-#include <signal.h>
-#include <wait.h>
-#include <limits.h>
-#include <linux/limits.h>
-#include <sysexits.h>
-#include <ctype.h>
-#include <pthread.h>
-#include <sched.h>
-#include <time.h>
-#include <sys/times.h>
-#include <sys/syscall.h>
+void
+show_clock_resolution(void)
+{
+	struct timespec res;
 
-
-#define MS_TO_NS(val) (val * 1000000)
-#define NSEC_PER_SEC 1000000000
-
-typedef struct {
-	pid_t kernel_tid;
-	pthread_t tid;
-	void (*func) (void);
-	struct sched_param sched_param;
-	struct timespec t;
-	int dt;
-} fiber_element_t;
-
-
-// see https://en.wikipedia.org/wiki/Fiber_%28computer_science%29
-void *
-fiber(void *arg);
-
-int
-build_sched_table(fiber_element_t fiber_array[], int count);
-
-int
-set_sched_props(fiber_element_t fiber_array[], int count);
-
-int
-start_sched_table(fiber_element_t fiber_array[], int count);
-
-#endif
+	if (clock_getres(CLOCK_MONOTONIC, &res) == 0)
+		printf("Clock resolution is %lu nsec\n", res.tv_nsec);
+	else
+		printf("Can't get clock resolution\n");
+}

@@ -68,4 +68,4 @@ Example for function_1:
 Possible upgrades
 -----------------
 
-A possible extention would be to assign a fiber to a specific cpu. Another extention would be not to use real threads instead of fiber. With that extentions its possible to use SCHED_RR or better SCHED_DEADLINE.
+A possible extention would be to assign a fiber to a specific cpu. Another extention would be to use real threads instead of fiber. With that extentions its possible to use SCHED_RR or better SCHED_DEADLINE.

@@ -78,7 +78,8 @@ build_sched_table(fiber_element_t fiber_array[], int count)
 					 fiber,
 					 (void *) &fiber_array[i]);
 		if (ret != 0) {
-			printf("pthread_create\n");
+			errno = ret;
+			perror("pthread_create");
 			return -1;
 		}
 	}
@@ -99,7 +100,7 @@ set_sched_props(fiber_element_t fiber_array[], int count)
 
 		if (sched_setscheduler(fiber->kernel_tid, SCHED_FIFO,
 				       &fiber->sched_param)) {
-			printf("could not set scheduling policy SCHED_FIFO\n");
+			perror("could not set scheduling policy SCHED_FIFO");
 			return -1;
 		}
 	}
@@ -120,7 +121,8 @@ start_sched_table(fiber_element_t fiber_array[], int count)
 	for (i = 0; i < count; i++) {
 		ret = pthread_join(fiber_array[i].tid, NULL);
 		if (ret != 0) {
-			printf("pthread_join\n");
+			errno = ret;
+			perror("pthread_join");
 			return -1;
 		}
 	}

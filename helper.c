@@ -34,5 +34,5 @@ show_clock_resolution(void)
 	if (clock_getres(CLOCK_MONOTONIC, &res) == 0)
 		printf("Clock resolution is %lu nsec\n", res.tv_nsec);
 	else
-		printf("Can't get clock resolution\n");
+		perror("Can't get clock resolution");
 }

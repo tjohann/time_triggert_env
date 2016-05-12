@@ -65,7 +65,7 @@ fiber_element_t fiber_array[] =
 		.func = fiber_1,
 		.sched_param = { .sched_priority = 89,
 		},
-		.cpu = 1,
+		.cpu = 0,
 		.policy = SCHED_FIFO,
 		.dt = MS_TO_NS(10),
 	},
@@ -73,7 +73,7 @@ fiber_element_t fiber_array[] =
 		.func = fiber_2,
 		.sched_param = { .sched_priority = 90,
 		},
-		.cpu = 2,
+		.cpu = 1,
 		.policy = SCHED_RR,
 		.dt = MS_TO_NS(100),
 	}

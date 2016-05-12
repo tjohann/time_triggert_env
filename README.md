@@ -88,12 +88,28 @@ Examples
 
 	example1.c -> simple example to show usage
 	exampe_gpio.c -> let a PIN toggle (with LED)
+	
+	
+Example1
+--------
+
+![Alt text](pics/example1_stdout.png?raw=true "function calls of all fiber")
+![Alt text](pics/example1_htop.png?raw=true "htop output")
+
+
+Example_gpio
+------------
+
+tbd.
 
 
 Possible extenstion
 -------------------
 
-At the moment the maximal cyclic time is 999ms, but it should be possible have values >=1s. 
+1. At the moment the maximal cyclic time is 999ms, but it should be possible have values >=1s. 
+2. Check for overruns (within SCHED_FF)
+3. Check for overruns (within a fiber)
+4. Correct signal-handling (SIGINT ...)
 
 
 Test environment

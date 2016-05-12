@@ -74,7 +74,9 @@ A possible extention would be to assign a fiber to a specific cpu (work in proge
 Test environment
 ----------------
 
-Actually I use a void-linux (http://www.voidlinux.eu/) with PREEMPT kernel on a Bananapi-M1 (http://linux-sunxi.org/LeMaker_Banana_Pi). It has a dual-core armv7hf processor@1GHz. I support that device with a RT-PREEMPT patched kernel via my a20_sdk (https://github.com/tjohann/a20_sdk). When it comes to GPIO example I use my driver examples/scripts (https://github.com/tjohann/mydriver). On of the examples will be to toogle a PIN with a fixed sequence. For that I will use the my gpio driver. Here's my really simple workbench:
+Actually I use a void-linux (http://www.voidlinux.eu/) with PREEMPT kernel on a Bananapi-M1 (http://linux-sunxi.org/LeMaker_Banana_Pi). It has a dual-core armv7hf processor@1GHz. I support that device with a RT-PREEMPT patched kernel via my a20_sdk (https://github.com/tjohann/a20_sdk). 
+
+When it comes to GPIO example I use my driver examples/scripts (https://github.com/tjohann/mydriver). On of the examples will be to toogle a PIN with a fixed sequence. For that I will use the my gpio driver. Here's my really simple workbench:
 
 ![Alt text](pics/gpio_led_01.jpg?raw=true "GPIO-LED")
 

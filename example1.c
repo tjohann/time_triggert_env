@@ -53,49 +53,30 @@ static void
 fiber_2 (void)
 {
 	function_2();
-}
-
-static void
-fiber_3 (void)
-{
+	function_2();
+	function_3();
 	function_4();
 }
 
-static void
-fiber_4 (void)
-{
-	function_1();
-	function_2();
-	function_3();
-}
-
-size_t num_fiber_elements = 4;
+size_t num_fiber_elements = 2;
 fiber_element_t fiber_array[] =
 {
 	{
 		.func = fiber_1,
-		.sched_param = { .sched_priority = 90,
-		},
-		.dt = MS_TO_NS(1),
-	},
-	{
-		.func = fiber_2,
 		.sched_param = { .sched_priority = 89,
 		},
+		.cpu = 1,
+		.policy = SCHED_FIFO,
 		.dt = MS_TO_NS(10),
 	},
 	{
-		.func = fiber_3,
-		.sched_param = { .sched_priority = 88,
+		.func = fiber_2,
+		.sched_param = { .sched_priority = 90,
 		},
-		.dt = MS_TO_NS(50),
-	},
-	{
-		.func = fiber_4,
-		.sched_param = { .sched_priority = 87,
-		},
+		.cpu = 2,
+		.policy = SCHED_RR,
 		.dt = MS_TO_NS(100),
-	},
+	}
 };
 
 int

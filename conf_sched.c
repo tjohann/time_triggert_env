@@ -22,6 +22,16 @@
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
+
+static inline
+void ts_norm(struct timespec *t)
+{
+	while (t->tv_nsec >= NSEC_PER_SEC) {
+		t->tv_nsec -= NSEC_PER_SEC;
+		t->tv_sec++;
+	}
+}
+
 /*
  * see https://en.wikipedia.org/wiki/Fiber_%28computer_science%29
  */
@@ -33,7 +43,7 @@ fiber(void *arg)
 
 	fiber->kernel_tid = kernel_tid;
 
-	/* prealloc 4k of stack and heap */
+	/* pre-alloc 4k of stack and heap */
 	stack_prefault(4);
 	heap_prefault(4);
 	
@@ -55,10 +65,7 @@ fiber(void *arg)
 		fiber->func();
 		
 		fiber->t.tv_nsec += fiber->dt;
-		while (fiber->t.tv_nsec >= NSEC_PER_SEC) {
-			fiber->t.tv_nsec -= NSEC_PER_SEC;
-			fiber->t.tv_sec++;
-		}
+		ts_norm(&fiber->t);
 	}
 
 	return NULL;
@@ -90,15 +97,32 @@ build_sched_table(fiber_element_t fiber_array[], int count)
 int
 set_sched_props(fiber_element_t fiber_array[], int count)
 {
+	cpu_set_t set;
 	fiber_element_t *fiber = NULL;
 	
 	int i = 0;
 	for (i = 0; i < count; i++) {
 		fiber = &fiber_array[i];
 
-		if (sched_setscheduler(fiber->kernel_tid, SCHED_FIFO,
+		CPU_ZERO(&set);
+		CPU_SET(fiber->cpu, &set);
+
+		if (CPU_ISSET(fiber->cpu, &set) == false) {
+			printf("could not set fiber on CPU %d" , fiber->cpu);
+			return -1;
+		}
+
+		if (sched_setaffinity(fiber->kernel_tid, sizeof(cpu_set_t),
+				      &set) == -1) {
+			if (errno == EINVAL) {
+				perror("sched_setaffinity");
+				return -1;
+			}
+		}
+		
+		if (sched_setscheduler(fiber->kernel_tid, fiber->policy,
 				       &fiber->sched_param)) {
-			perror("could not set scheduling policy SCHED_FIFO");
+			perror("sched_setscheduler");
 			return -1;
 		}
 	}

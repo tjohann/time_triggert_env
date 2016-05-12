@@ -29,25 +29,32 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stddef.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <string.h>
 #include <signal.h>
+#include <syslog.h>
 #include <wait.h>
 #include <limits.h>
 #include <linux/limits.h>
 #include <sysexits.h>
 #include <ctype.h>
 #include <pthread.h>
+#include <bsd/stdlib.h>
+#include <sys/utsname.h>
 #include <sched.h>
 #include <time.h>
 #include <sys/times.h>
+#include <sys/sysinfo.h>
+#include <semaphore.h>
 #include <sys/syscall.h>
 
 #define BASE_SAFE_SIZE 1024
@@ -61,6 +68,8 @@ typedef struct {
 	void (*func) (void);
 	struct sched_param sched_param;
 	struct timespec t;
+	int policy;
+	int cpu;
 	int dt;
 } fiber_element_t;
 

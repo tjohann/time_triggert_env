@@ -38,7 +38,9 @@ fiber_element_t fiber_array[] =
 		.func = fiber_1,
 		.sched_param = { .sched_priority = 90,
 		},
-		.dt = MS_TO_NS(1),
+		.cpu = 1,
+		.policy = SCHED_FIFO,
+		.dt = MS_TO_NS(750),
 	}
 };
 

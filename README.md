@@ -11,12 +11,15 @@ Basic idea configuration
 
 The basic idea is to split the task into different functions:
 
+	/* build table of functions for a fiber */
 	int build_sched_table(fiber_element_t fiber_array[], int count);
+	/* set scheduling properties of a fiber */
 	int set_sched_props(fiber_element_t fiber_array[], int count);
+	/* start a fiber -> wait for pthread_exit */
 	int start_sched_table(fiber_element_t fiber_array[], int count);
 
 
-The scheduling entity is a fiber (cooperative thread -> SCHED_FIFO)
+The scheduling entity is a fiber (cooperative thread or preemptive thread)
 	
 	void *fiber(void *arg);
 	
@@ -27,16 +30,25 @@ Example
 The basic example example1 shows the usage:
 
 	
-	size_t num_fiber_elements = 4;
+	size_t num_fiber_elements = 2;
 	fiber_element_t fiber_array[] =
 	{
 		{
-			.func = fiber_4,
+			.func = fiber_1,
+			.sched_param = { .sched_priority = 89,
+			},
+			.cpu = 1,
+			.policy = SCHED_FIFO,
+			.dt = MS_TO_NS(10),
+		},
+		{
+			.func = fiber_2,
 			.sched_param = { .sched_priority = 90,
-	    },
-		.dt = MS_TO_NS(1),
-	},
-	...
+			},
+			.cpu = 2,
+			.policy = SCHED_RR,
+			.dt = MS_TO_NS(100),
+		}
 	};
 
 
@@ -45,30 +57,37 @@ With fiber_array i define an array with all needed properties.
 A fiber is defined like:
 
 	static void
-	fiber_4 (void)
+	fiber_2 (void)
 	{
-		function_1();
+		function_2();
 		function_2();
 		function_3();
 		function_4();
 	}
 	
-With the properities defined in fiber_array[x] we have a SCHED_FIFO thread (fiber) with priority 90 called every 1ms. Within this fiber we call function_1 to function_4.
+With the properities defined in fiber_array[x] we have a SCHED_FIFO/SCHED_RR thread (fiber_2) with priority 90 called every 100ms. Within this fiber we call function_2 to function_4.
 
 
-Example for function_1:
+Example for function_2:
 
 	static void
-	function_1()
+	function_2()
 	{
-		printf("in function_1\n");
+		printf("in function_2\n");
 	}
 
 
-Possible upgrades
------------------
+Examples
+--------
 
-A possible extention would be to assign a fiber to a specific cpu (work in progess ... see TODO). Another extention would be to use SCHED_RR or better SCHED_DEADLINE (work in progress ... see TODO).
+	example1.c -> simple example to show usage
+	exampe_gpio.c -> let a PIN toggle (with LED)
+
+
+Possible extenstion
+-------------------
+
+At the moment the maximal cyclic time is 999ms but it should be possible have values >=1s. 
 
 
 Test environment

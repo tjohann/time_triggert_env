@@ -17,7 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#include "conf_sched.h"
+#include "tt_env.h"
 
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
@@ -33,6 +33,10 @@ fiber(void *arg)
 
 	fiber->kernel_tid = kernel_tid;
 
+	/* prealloc 4k of stack and heap */
+	stack_prefault(4);
+	heap_prefault(4);
+	
 	pthread_mutex_lock(&mutex);
 	pthread_cond_wait(&cond, &mutex);
 	pthread_mutex_unlock(&mutex);
@@ -45,10 +49,8 @@ fiber(void *arg)
 	for (;;) {
 		s = clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME,
 				    &fiber->t, NULL);
-		if (s == EINTR) {
+		if (s == EINTR)
 			printf("interrupted by signal\n");
-			continue;
-		}
 
 		fiber->func();
 		

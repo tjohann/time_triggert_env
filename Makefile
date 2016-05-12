@@ -13,10 +13,10 @@ all: example1 example_gpio
 	@echo "|           finished build                  |"
 	@echo "+-------------------------------------------+"	
 
-example1: $(BASEFILES) example1.c conf_sched.h helper.h
+example1: $(BASEFILES) example1.c tt_env.h
 	${CC} $(CFLAGS) -o example1 $(BASEFILES) example1.c $(LDLIBS)
 
-example_gpio: $(BASEFILES) example_gpio.c conf_sched.h helper.h
+example_gpio: $(BASEFILES) example_gpio.c tt_env.h
 	${CC} $(CFLAGS) -o example_gpio $(BASEFILES) example_gpio.c $(LDLIBS) 
 
 clean::

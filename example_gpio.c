@@ -17,8 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#include "conf_sched.h"
-#include "helper.h"
+#include "tt_env.h"
 
 static void
 function_1()

@@ -17,7 +17,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#include "helper.h"
+#include "tt_env.h"
 
 void
 show_clock_resolution(void)
@@ -28,4 +28,28 @@ show_clock_resolution(void)
 		printf("Clock resolution is %lu nsec\n", res.tv_nsec);
 	else
 		perror("Can't get clock resolution");
+}
+
+void
+stack_prefault(size_t size)
+{
+        unsigned char dummy[size * BASE_SAFE_SIZE];
+        memset(dummy, 0, size * BASE_SAFE_SIZE);
+}
+
+int
+heap_prefault(size_t size)
+{
+        unsigned char *dummy;
+	size_t len = size * BASE_SAFE_SIZE;
+
+	dummy = malloc(len);
+	if (dummy == NULL) {
+		perror("malloc");
+		exit (EXIT_FAILURE);
+	}
+
+	memset(dummy, 0, len);
+
+	return 0;
 }

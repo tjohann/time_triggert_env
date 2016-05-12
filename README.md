@@ -3,7 +3,7 @@ time_triggert_env
 
 This repository is my playground around the linux realtime kernel scheduler. Micheal J. Pont (http://www.safetty.net/about) describes in his book ERES (http://www.safetty.net/publications/the-engineering-of-reliable-embedded-systems) a time triggert os/system/environment to build reliable embedded systems. As a linux and open-source developer i try to reflect the ideas to linux. The linux kernel already provides all needed parts like SCHED_FIFO/SCHED_RR and so the environment (time_triggert_env) is more a configuration of them and a little bit around it.
 
-Dont expect to much from this repository because its only a starting point and more a playground than something serious. With this repository i also want to learn more about realtime and linux in general.
+Dont expect to much from this repository because its only a starting point and more a playground than something serious. With this repository I also want to learn more about linux realtime capabilities.
 
 
 Basic idea configuration
@@ -53,7 +53,7 @@ A fiber is defined like:
 		function_4();
 	}
 	
-With the properities defined in fiber_array[x] we have a SCHED_FIFO thread (fiber)	with priority 90 called every 1ms. Within this fiber we call function_1 to function_4.
+With the properities defined in fiber_array[x] we have a SCHED_FIFO thread (fiber) with priority 90 called every 1ms. Within this fiber we call function_1 to function_4.
 
 
 Example for function_1:
@@ -68,12 +68,13 @@ Example for function_1:
 Possible upgrades
 -----------------
 
-A possible extention would be to assign a fiber to a specific cpu. Another extention would be to use real threads instead of fiber. With that extentions its possible to use SCHED_RR or better SCHED_DEADLINE.
+A possible extention would be to assign a fiber to a specific cpu (work in progess ... see TODO). Another extention would be to use SCHED_RR or better SCHED_DEADLINE (work in progress ... see TODO).
 
 
 Test environment
 ----------------
 
-Actually i use a linux distribution (of course void-linux -> http://www.voidlinux.eu/) with PREEMPT kernel on a imx233 from olimex (https://www.olimex.com/Products/OLinuXino/iMX233/iMX233-OLinuXino-MINI/open-source-hardware). It has a single arm926te processor@454MHz. For further testing (with trace-cmd) i will also use a board from olimex (https://www.olimex.com/Products/SOM/A20/A20-SOM-EVB/open-source-hardware). It has a dual-core armv7hf processor@1GHz. I support that device with a RT-PREEMPT patched kernel via my a20_sdk (https://github.com/tjohann/a20_sdk). 
+Actually I use a void-linux (http://www.voidlinux.eu/) with PREEMPT kernel on a Bananapi-M1 (http://linux-sunxi.org/LeMaker_Banana_Pi). It has a dual-core armv7hf processor@1GHz. I support that device with a RT-PREEMPT patched kernel via my a20_sdk (https://github.com/tjohann/a20_sdk). When it comes to GPIO example I use my driver examples/scripts (https://github.com/tjohann/mydriver). On of the examples will be to toogle a PIN with a fixed sequence. For that I will use the my gpio driver. Here's my really simple workbench:
 
-Finally i also want to use FreeBSD on it and check the realtime capabilities of it. 
+![Alt text](pics/gpio_led_01.jpg?raw=true "GPIO-LED")
+

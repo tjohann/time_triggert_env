@@ -1,0 +1,13 @@
+#
+# TODO with date and progress
+#
+
+#
+# -------------- 2016-05-12 ----------------------------------------------------
+#
+- add LED example based on https://github.com/tjohann/mydriver/tree/master/userspace_examples/gpio_script and https://github.com/tjohann/mydriver/tree/master/gpio_irq_driver
+- add cpu affinity
+- add SCHED_RR
+- make use of libcap-ng
+
+

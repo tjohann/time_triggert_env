@@ -3,7 +3,7 @@ time_triggert_env
 
 This repository is my playground around the linux realtime kernel scheduler. Micheal J. Pont (http://www.safetty.net/about) describes in his book ERES (http://www.safetty.net/publications/the-engineering-of-reliable-embedded-systems) a time triggert os/system/environment to build reliable embedded systems. As a linux and open-source developer i try to reflect the ideas to linux. The linux kernel already provides all needed parts like SCHED_FIFO/SCHED_RR and so the environment (time_triggert_env) is more a configuration of them and a little bit around it.
 
-Dont expect to much from this repository because its only a starting point and more a playground than something serious. With this repository I also want to learn more about linux realtime capabilities.
+Dont expect to much from this repository because its only a starting point and more a playground than something serious (https://tjohann.wordpress.com/category/embedded-realtime/). With this repository I also want to learn more about linux realtime capabilities.
 
 
 Basic idea configuration

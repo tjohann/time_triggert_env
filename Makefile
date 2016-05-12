@@ -4,8 +4,8 @@
 
 MODULES = Documentation pics
 
-CFLAGS = -Wall -O2 -g
-LDLIBS = -lpthread -lrt 
+CFLAGS = -Wall -O2 -g `pkg-config --cflags libcap-ng`
+LDLIBS = -lpthread -lrt `pkg-config --libs libcap-ng`
 BASEFILES = conf_sched.c helper.c 
 
 all: example1 example_gpio

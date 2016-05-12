@@ -107,8 +107,14 @@ set_sched_props(fiber_element_t fiber_array[], int count)
 		CPU_ZERO(&set);
 		CPU_SET(fiber->cpu, &set);
 
+		/* some infos to follow whats going on under the hood */
+		printf("fiber number %d\n", i);
+		printf("fiber->cpu = %d\n", fiber->cpu);
+		printf("fiber->kernel_tid = %d\n", fiber->kernel_tid);
+		printf("fiber->policy = %d\n", fiber->policy);
+		
 		if (CPU_ISSET(fiber->cpu, &set) == false) {
-			printf("could not set fiber on CPU %d" , fiber->cpu);
+			printf("could not set fiber on CPU %d\n" , fiber->cpu);
 			return -1;
 		}
 

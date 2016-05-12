@@ -83,22 +83,32 @@ int
 main(int argc, char *argv[])
 {
 	show_clock_resolution();
+
+	if (check_for_rtpreempt() == false) {
+		printf("NO (RT-)PREEMPT support\n");
+                exit(EXIT_FAILURE);
+        } else {
+                printf("(RT-)PREEMPT support\n");
+	}
+
+	if (drop_capability(CAP_SYS_NICE) == -1)
+		exit(EXIT_FAILURE);
 	
 	if (build_sched_table(fiber_array, num_fiber_elements) != 0) {
 		printf("Could not build_sched_table\n");
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 
 	if ( set_sched_props(fiber_array, num_fiber_elements) != 0) {
 		printf("Could not set sched prop\n");
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 	
 	fflush(stdout);
 
 	if (start_sched_table(fiber_array, num_fiber_elements) != 0) {
-		printf("Could not start sched table");
-		exit (EXIT_FAILURE);
+		printf("Could not start sched table\n");
+		exit(EXIT_FAILURE);
 	}
 
 	return EXIT_SUCCESS;

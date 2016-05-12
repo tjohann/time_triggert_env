@@ -53,3 +53,58 @@ heap_prefault(size_t size)
 
 	return 0;
 }
+
+bool
+check_for_rtpreempt()
+{
+	FILE *fd;
+	struct utsname u;
+
+	if (uname(&u) == -1) {
+		perror("uname");
+		return false;
+	}
+
+	if (strstr(u.version, "PREEMPT") == NULL) {
+		printf("NO preempt kernel\n");
+		return false;
+	}
+
+	int flag;
+	if ((fd = fopen("/sys/kernel/realtime","r")) != NULL) {
+		if ((fscanf(fd, "%d", &flag) == 1) && (flag == 1)) {
+			printf("Kernel is a RT-PREEMPT kernel\n");
+			goto out;
+		} else {
+			printf("Kernel is a PREEMPT kernel\n");
+			goto out;
+		}
+	} else {
+		printf("Kernel is a PREEMPT kernel\n");
+		goto out;
+	}
+
+out:
+	if (fd != NULL)
+		fclose(fd);
+
+	return true;
+}
+
+int
+drop_capability(int hold_cap)
+{
+	capng_clear(CAPNG_SELECT_BOTH);
+
+	if (capng_update(CAPNG_ADD, CAPNG_EFFECTIVE | CAPNG_PERMITTED,
+			 hold_cap) != 0) {
+		printf("could not set capability -> %s\n",
+		       capng_print_caps_text(CAPNG_PRINT_STDOUT,
+					     CAPNG_EFFECTIVE));
+		return -1;
+	}
+
+	capng_apply(CAPNG_SELECT_BOTH);
+
+	return 0;
+}

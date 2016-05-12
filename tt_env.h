@@ -57,10 +57,30 @@
 #include <semaphore.h>
 #include <sys/syscall.h>
 
+// libcap-ng
+#include <cap-ng.h>
+
+/*
+ * common defines
+ * -------------
+ */
+
 #define BASE_SAFE_SIZE 1024
+
+
+/*
+ * common macros
+ * -------------
+ */
 
 #define MS_TO_NS(val) (val * 1000000)
 #define NSEC_PER_SEC 1000000000
+
+
+/*
+ * common types
+ * -------------
+ */
 
 typedef struct {
 	pid_t kernel_tid;
@@ -72,6 +92,12 @@ typedef struct {
 	int cpu;
 	int dt;
 } fiber_element_t;
+
+
+/*
+ * conf_sched.c
+ * ============
+ */
 
 /* see https://en.wikipedia.org/wiki/Fiber_%28computer_science%29 */
 void *
@@ -89,6 +115,12 @@ set_sched_props(fiber_element_t fiber_array[], int count);
 int
 start_sched_table(fiber_element_t fiber_array[], int count);
 
+
+/*
+ * helper.c
+ * ========
+ */
+
 /* show clock resolution */
 void
 show_clock_resolution(void);
@@ -100,5 +132,13 @@ stack_prefault(size_t size);
 /* pre-alloc heap memory */
 int
 heap_prefault(size_t size);
+
+/* check for at least PREEMPT kernel */
+bool
+check_for_rtpreempt();
+
+/* drop all capabilitys excluding hold_cap */
+int
+drop_capability(int hold_cap);
 
 #endif

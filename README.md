@@ -9,7 +9,7 @@ Dont expect to much from this repository because its only a starting point and m
 Prerequisites
 -------------
 
-I use libcap-ng to get rid of root rights. 
+I use libcap-ng to get rid of root rights.
 
 
 Basic idea configuration
@@ -26,16 +26,16 @@ The basic idea is to split the task into different functions:
 
 
 The scheduling entity is a fiber (cooperative thread or preemptive thread)
-	
+
 	void *fiber(void *arg);
-	
+
 
 Example
 -------
 
 The basic example example1 shows the usage:
 
-	
+
 	size_t num_fiber_elements = 2;
 	fiber_element_t fiber_array[] =
 	{
@@ -70,7 +70,7 @@ A fiber is defined like:
 		function_3();
 		function_4();
 	}
-	
+
 With the properities defined in fiber_array[x] we have a SCHED_FIFO/SCHED_RR thread (fiber_2) with priority 90 at CPU 1 (0...x) called every 100ms. Within this fiber we call function_2 to function_4.
 
 
@@ -88,8 +88,8 @@ Examples
 
 	example1.c -> simple example to show usage
 	exampe_gpio.c -> let a PIN toggle (with LED)
-	
-	
+
+
 Example1
 --------
 
@@ -100,13 +100,13 @@ Example1
 Example_gpio
 ------------
 
-tbd.
+To use that example you need my gpio driver (https://github.com/tjohann/mydriver.git). So pls clone, build and install the gpio_driver.
 
 
 Possible extenstion
 -------------------
 
-1. At the moment the maximal cyclic time is 999ms, but it should be possible have values >=1s. 
+1. At the moment the maximal cyclic time is 999ms, but it should be possible have values >=1s.
 2. Check for overruns (within SCHED_FF)
 3. Check for overruns (within a fiber)
 4. Correct signal-handling (SIGINT ...)
@@ -115,7 +115,7 @@ Possible extenstion
 Test environment
 ----------------
 
-Actually I use a void-linux (http://www.voidlinux.eu/) with PREEMPT kernel on a Bananapi-M1 (http://linux-sunxi.org/LeMaker_Banana_Pi). It has a dual-core armv7hf processor@1GHz. I support that device with a RT-PREEMPT patched kernel via my a20_sdk (https://github.com/tjohann/a20_sdk). 
+Actually I use a void-linux (http://www.voidlinux.eu/) with PREEMPT kernel on a Bananapi-M1 (http://linux-sunxi.org/LeMaker_Banana_Pi). It has a dual-core armv7hf processor@1GHz. I support that device with a RT-PREEMPT patched kernel via my a20_sdk (https://github.com/tjohann/a20_sdk).
 
 When it comes to GPIO example I use my driver examples/scripts (https://github.com/tjohann/mydriver). On of the examples will be to toogle a PIN with a fixed sequence. For that I will use the my gpio driver. Here's my really simple workbench:
 

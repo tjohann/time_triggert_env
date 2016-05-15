@@ -2,10 +2,10 @@
 # for cleaning
 #
 
-all: 
+all:
 	@echo Cheers
 
 clean:
 	rm -f *~ .*~
 
-.PHONY: all clean 
+.PHONY: all clean

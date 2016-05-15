@@ -46,7 +46,7 @@ fiber(void *arg)
 	/* pre-alloc 4k of stack and heap */
 	stack_prefault(4);
 	heap_prefault(4);
-	
+
 	pthread_mutex_lock(&mutex);
 	pthread_cond_wait(&cond, &mutex);
 	pthread_mutex_unlock(&mutex);
@@ -63,7 +63,7 @@ fiber(void *arg)
 			printf("interrupted by signal\n");
 
 		fiber->func();
-		
+
 		fiber->t.tv_nsec += fiber->dt;
 		ts_norm(&fiber->t);
 	}
@@ -76,7 +76,7 @@ build_sched_table(fiber_element_t fiber_array[], int count)
 {
 	int ret = -1;
 	int i = 0;
-	
+
 	for (i = 0; i < count; i++) {
 		ret = pthread_create(&fiber_array[i].tid,
 					 NULL,
@@ -90,7 +90,7 @@ build_sched_table(fiber_element_t fiber_array[], int count)
 	}
 
 	sleep (1);
-	
+
 	return 0;
 }
 
@@ -99,7 +99,7 @@ set_sched_props(fiber_element_t fiber_array[], int count)
 {
 	cpu_set_t set;
 	fiber_element_t *fiber = NULL;
-	
+
 	int i = 0;
 	for (i = 0; i < count; i++) {
 		fiber = &fiber_array[i];
@@ -112,7 +112,7 @@ set_sched_props(fiber_element_t fiber_array[], int count)
 		printf("fiber->cpu = %d\n", fiber->cpu);
 		printf("fiber->kernel_tid = %d\n", fiber->kernel_tid);
 		printf("fiber->policy = %d\n", fiber->policy);
-		
+
 		if (CPU_ISSET(fiber->cpu, &set) == false) {
 			printf("could not set fiber on CPU %d\n" , fiber->cpu);
 			return -1;
@@ -125,7 +125,7 @@ set_sched_props(fiber_element_t fiber_array[], int count)
 				return -1;
 			}
 		}
-		
+
 		if (sched_setscheduler(fiber->kernel_tid, fiber->policy,
 				       &fiber->sched_param)) {
 			perror("sched_setscheduler");
@@ -140,7 +140,7 @@ int
 start_sched_table(fiber_element_t fiber_array[], int count)
 {
 	int ret = -1;
-	
+
 	pthread_mutex_lock(&mutex);
 	pthread_cond_broadcast(&cond);
 	pthread_mutex_unlock(&mutex);

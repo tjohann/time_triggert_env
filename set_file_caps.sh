@@ -12,12 +12,12 @@ else
     echo "example1 does not exist"
 fi
 
-if [ -e example_gpio ]; then 
+if [ -e example_gpio ]; then
     sudo setcap "cap_sys_nice=p" ./example_gpio
 else
     echo "example_gpio does not exist"
 fi
-    
+
 echo " "
 echo "+----------------------------------------+"
 echo "|          Cheers $USER                |"

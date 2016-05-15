@@ -19,10 +19,36 @@
 
 #include "tt_env.h"
 
+#define DEV_NAME "/dev/gpio_driver"
+
+static int fd;
+static ssize_t n;
+static int value;
+static size_t len;
+
+static void
+init_example()
+{
+	fd = open(DEV_NAME, O_WRONLY);
+	if (fd == -1) {
+		perror("open");
+		exit(EXIT_FAILURE);
+	}
+
+	len = sizeof(value);
+}
+
 static void
 function_1()
 {
-	printf("in function_1\n");
+	n = write(fd, &value, len);
+	if (n == -1)
+		perror("write");
+
+	if (value == 1)
+		value = 0;
+	else
+		value = 1;
 }
 
 static void
@@ -40,7 +66,7 @@ fiber_element_t fiber_array[] =
 		},
 		.cpu = 0,
 		.policy = SCHED_FIFO,
-		.dt = MS_TO_NS(750),
+		.dt = MS_TO_NS(500),
 	}
 };
 
@@ -58,7 +84,7 @@ main(int argc, char *argv[])
 
 	if (drop_capability(CAP_SYS_NICE) == -1)
 		exit(EXIT_FAILURE);
-	
+
 	if (build_sched_table(fiber_array, num_fiber_elements) != 0) {
 		printf("Could not build_sched_table\n");
 		exit (EXIT_FAILURE);
@@ -68,7 +94,9 @@ main(int argc, char *argv[])
 		printf("Could not set sched prop\n");
 		exit(EXIT_FAILURE);
 	}
-	
+
+	init_example();
+
 	fflush(stdout);
 
 	if (start_sched_table(fiber_array, num_fiber_elements) != 0) {

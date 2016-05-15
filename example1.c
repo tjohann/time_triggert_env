@@ -93,7 +93,7 @@ main(int argc, char *argv[])
 
 	if (drop_capability(CAP_SYS_NICE) == -1)
 		exit(EXIT_FAILURE);
-	
+
 	if (build_sched_table(fiber_array, num_fiber_elements) != 0) {
 		printf("Could not build_sched_table\n");
 		exit(EXIT_FAILURE);
@@ -103,7 +103,7 @@ main(int argc, char *argv[])
 		printf("Could not set sched prop\n");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	fflush(stdout);
 
 	if (start_sched_table(fiber_array, num_fiber_elements) != 0) {

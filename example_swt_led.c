@@ -79,6 +79,12 @@ function_swt()
 	size_t n = read(fd_swt, &value_swt, len);
 	if (n == -1)
 		perror("read");
+
+	/* due to pullup */
+	if (value_swt == 1)
+		value_swt = 0;
+	else
+		value_swt = 1;
 	
 	n = write(fd_led, &value_swt, len);
 	if (n == -1)

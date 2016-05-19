@@ -21,52 +21,102 @@
 
 #define DEV_NAME "/dev/gpio_driver"
 
-static int fd;
+/* ioctl's */
+#define IOCTL_SET_WRITE_PIN 0x0001
+#define IOCTL_SET_READ_PIN  0x0002
+
+/* pin 273 */
+static int pin_500 = 273;
+static int fd_500;
+static int value_500;
+
+/* pin 275 */
+static int fd_750;
+static int value_750;
+
+/* common for both functions */
 static ssize_t n;
-static int value;
 static size_t len;
 
 static void
 init_example()
 {
-	fd = open(DEV_NAME, O_WRONLY);
-	if (fd == -1) {
+	fd_500 = open(DEV_NAME, O_WRONLY);
+	if (fd_500 == -1) {
 		perror("open");
 		exit(EXIT_FAILURE);
 	}
 
-	len = sizeof(value);
+	if(ioctl(fd_500, IOCTL_SET_WRITE_PIN, pin_500) == -1) {
+		perror("ioctl");
+		exit(EXIT_FAILURE);
+	}
+
+	fd_750 = open(DEV_NAME, O_WRONLY);
+	if (fd_750 == -1) {
+		perror("open");
+		exit(EXIT_FAILURE);
+	}
+	
+	len = sizeof(value_500);
 }
 
 static void
-function_1()
+function_500()
 {
-	n = write(fd, &value, len);
+	n = write(fd_500, &value_500, len);
 	if (n == -1)
 		perror("write");
 
-	if (value == 1)
-		value = 0;
+	if (value_500 == 1)
+		value_500 = 0;
 	else
-		value = 1;
+		value_500 = 1;
 }
 
 static void
-fiber_1 (void)
+function_750()
 {
-	function_1();
+	n = write(fd_750, &value_750, len);
+	if (n == -1)
+		perror("write");
+
+	if (value_750 == 1)
+		value_750 = 0;
+	else
+		value_750 = 1;
 }
 
-size_t num_fiber_elements = 1;
+static void
+fiber_500 (void)
+{
+	function_500();
+}
+
+static void
+fiber_750 (void)
+{
+	function_750();
+}
+
+size_t num_fiber_elements = 2;
 fiber_element_t fiber_array[] =
 {
 	{
-		.func = fiber_1,
+		.func = fiber_500,
 		.sched_param = { .sched_priority = 90,
 		},
 		.cpu = 0,
 		.policy = SCHED_FIFO,
 		.dt = MS_TO_NS(500),
+	},
+	{
+		.func = fiber_750,
+		.sched_param = { .sched_priority = 90,
+		},
+		.cpu = 1,
+		.policy = SCHED_FIFO,
+		.dt = MS_TO_NS(750),
 	}
 };
 

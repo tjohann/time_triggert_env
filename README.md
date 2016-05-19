@@ -97,8 +97,8 @@ Example1
 ![Alt text](pics/example1_htop.png?raw=true "htop output")
 
 
-Example_gpio
-------------
+Example_gpio(s)
+---------------
 
 To use that example you need my gpio driver (https://github.com/tjohann/mydriver.git). So pls clone, build and install the gpio_driver.
 

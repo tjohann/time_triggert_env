@@ -53,7 +53,7 @@ init_example()
 		exit(EXIT_FAILURE);
 	}
 
-	if(ioctl(fd_750, IOCTL_SET_WRITE_PIN, pin_750) == -1) {
+	if(ioctl(fd_750, IOCTL_SET_WRITE_PIN, &pin_750) == -1) {
 		perror("ioctl");
 		exit(EXIT_FAILURE);
 	}

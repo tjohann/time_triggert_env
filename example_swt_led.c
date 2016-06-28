@@ -69,7 +69,7 @@ init_example()
 		perror("open");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	len = sizeof(value_750);
 }
 
@@ -85,7 +85,7 @@ function_swt()
 		value_swt = 0;
 	else
 		value_swt = 1;
-	
+
 	n = write(fd_led, &value_swt, len);
 	if (n == -1)
 		perror("write");

@@ -57,7 +57,7 @@ init_example()
 		perror("open");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	len = sizeof(value_500);
 }
 

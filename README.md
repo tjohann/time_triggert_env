@@ -1,9 +1,11 @@
-Linux Realtime and Time-Triggert-System
-=======================================
+Linux Realtime and Time-Triggert-Systems
+========================================
 
-This repository is my playground around the linux realtime kernel scheduler. Micheal J. Pont (http://www.safetty.net/about) describes in his book ERES (http://www.safetty.net/publications/the-engineering-of-reliable-embedded-systems) a time triggert os/system/environment to build reliable embedded systems. As a linux and open-source developer i try to reflect the ideas to linux. The linux kernel already provides all needed parts like SCHED_FIFO/SCHED_RR and so the environment (time_triggert_env) is more a configuration of them and a little bit around it.
+This repository is my playground around the linux realtime kernel scheduler in general and realtime in special. Micheal J. Pont (http://www.safetty.net/about) describes in his book ERES (http://www.safetty.net/publications/the-engineering-of-reliable-embedded-systems) a time triggert os/system/environment to build reliable embedded systems. As a linux and open-source developer i try to reflect the ideas to linux. The linux kernel already provides all needed parts like SCHED_FIFO/SCHED_RR and so the environment (time_triggert_env) is more a configuration of them and a little bit around it.
 
 Dont expect to much from this repository because its only a starting point and more a playground than something serious (https://tjohann.wordpress.com/category/embedded-realtime/). With this repository I also want to learn more about linux realtime capabilities.
+
+Everthing useful will make it into libbaalue (https://github.com/tjohann/libbaalue.git).
 
 
 Prerequisites
@@ -34,7 +36,6 @@ Example
 -------
 
 The basic example example1 shows the usage:
-
 
 	size_t num_fiber_elements = 2;
 	fiber_element_t fiber_array[] =
@@ -86,18 +87,20 @@ Example for function_2:
 Examples
 --------
 
-	example1.c -> simple example to show usage
-	exampe_gpio.c -> let a PIN toggle (with LED)
+	ttenv_simple -> simple example to show usage
+	ttenv_gpio_simple -> ...
+	ttenv_gpio -> ...
+	ttenv_gpio -> ...
 
 
-Example1
---------
+ttenv_simple
+------------
 
 ![Alt text](pics/example1_stdout.png?raw=true "function calls of all fiber")
 ![Alt text](pics/example1_htop.png?raw=true "htop output")
 
 
-Example_gpio(s)
+ttenv_gpio(s)
 ---------------
 
 To use that example you need my gpio driver (https://github.com/tjohann/mydriver.git). So pls clone, build and install the gpio_driver.

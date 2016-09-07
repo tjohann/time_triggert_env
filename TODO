@@ -2,12 +2,28 @@
 # TODO with date and progress
 #
 
+
+#
+# -------------- 2016-09-06 ----------------------------------------------------
+#
+
+- unifiy struture of repository like in can_lin_env.git     [2016-09-06 -> done]
+- drop capabilitys in all existing examples
+- add download script for external repos                    [2016-09-06 -> done]
+- check the examples and make new screenshots
+
+
 #
 # -------------- 2016-05-12 ----------------------------------------------------
 #
-- add LED example based on https://github.com/tjohann/mydriver/tree/master/userspace_examples/gpio_script and https://github.com/tjohann/mydriver/tree/master/gpio_irq_driver
-- add cpu affinity
-- add SCHED_RR
-- make use of libcap-ng
+
+- add LED example based on
+  https://github.com/tjohann/mydriver/tree/master/userspace_examples/gpio_script
+  and
+  https://github.com/tjohann/mydriver/tree/master/gpio_irq_driver
+							    [2016-0X-XX -> done]
+- add cpu affinity                                          [2016-0X-XX -> done]
+- add SCHED_RR                                              [2016-0X-XX -> done]
+- make use of libcap-ng                                     [2016-0X-XX -> done]
 
 

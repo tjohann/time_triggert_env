@@ -17,123 +17,56 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#include "tt_env.h"
+#include "libttenv.h"
 
 #define DEV_NAME "/dev/gpio_driver"
 
-/* ioctl's */
-#define IOCTL_SET_WRITE_PIN 0x0001
-#define IOCTL_SET_READ_PIN  0x0002
-
-
-/* pin 273 -> blinking led */
-static int pin_750 = 273;
-static int fd_750;
-static int value_750;
-
-/* pin 275 (default output of gpio_driver) -> output led */
-//static int pin_led = 275;
-static int fd_led;
-
-/* pin 274 (default input of gpio_driver) -> swt */
-//static int pin_swt = 274;
-static int fd_swt;
-static int value_swt;
-
-
-/* common for all functions */
+static int fd;
+static ssize_t n;
+static int value;
 static size_t len;
 
 static void
 init_example()
 {
-	fd_750 = open(DEV_NAME, O_WRONLY);
-	if (fd_750 == -1) {
+	fd = open(DEV_NAME, O_WRONLY);
+	if (fd == -1) {
 		perror("open");
 		exit(EXIT_FAILURE);
 	}
 
-	if(ioctl(fd_750, IOCTL_SET_WRITE_PIN, &pin_750) == -1) {
-		perror("ioctl");
-		exit(EXIT_FAILURE);
-	}
-
-	fd_led = open(DEV_NAME, O_WRONLY);
-	if (fd_led == -1) {
-		perror("open");
-		exit(EXIT_FAILURE);
-	}
-
-	fd_swt = open(DEV_NAME, O_RDONLY);
-	if (fd_swt == -1) {
-		perror("open");
-		exit(EXIT_FAILURE);
-	}
-
-	len = sizeof(value_750);
+	len = sizeof(value);
 }
 
 static void
-function_swt()
+function_1()
 {
-	size_t n = read(fd_swt, &value_swt, len);
-	if (n == -1)
-		perror("read");
-
-	/* due to pullup */
-	if (value_swt == 1)
-		value_swt = 0;
-	else
-		value_swt = 1;
-
-	n = write(fd_led, &value_swt, len);
-	if (n == -1)
-		perror("write");
-}
-
-static void
-function_750()
-{
-	size_t n = write(fd_750, &value_750, len);
+	n = write(fd, &value, len);
 	if (n == -1)
 		perror("write");
 
-	if (value_750 == 1)
-		value_750 = 0;
+	if (value == 1)
+		value = 0;
 	else
-		value_750 = 1;
+		value = 1;
 }
 
 static void
-fiber_100 (void)
+fiber_1 (void)
 {
-	function_swt();
+	function_1();
 }
 
-static void
-fiber_750 (void)
-{
-	function_750();
-}
-
-size_t num_fiber_elements = 2;
+size_t num_fiber_elements = 1;
 fiber_element_t fiber_array[] =
 {
 	{
-		.func = fiber_100,
+		.func = fiber_1,
 		.sched_param = { .sched_priority = 90,
 		},
 		.cpu = 0,
 		.policy = SCHED_FIFO,
-		.dt = MS_TO_NS(100),
-	},
-	{
-		.func = fiber_750,
-		.sched_param = { .sched_priority = 90,
-		},
-		.cpu = 1,
-		.policy = SCHED_FIFO,
-		.dt = MS_TO_NS(750),
+		.dt = MS_TO_NS(500),
 	}
 };
 

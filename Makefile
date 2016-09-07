@@ -1,35 +1,61 @@
 #
-# Makefile
+# my simple makefile act as something like a user interface
 #
 
-MODULES = Documentation pics
+MODULES = $(shell ls -d */ | cut -f1 -d'/')
+BUILD = libhelper libttenv ttenv_simple ttenv_gpio_simple ttenv_gpio ttenv_swt_led
 
-CFLAGS = -Wall -O2 -g `pkg-config --cflags libcap-ng`
-LDLIBS = -lpthread -lrt `pkg-config --libs libcap-ng`
-BASEFILES = conf_sched.c helper.c
+all::
+	@echo "  +----------------------------------------------------------+"
+	@echo " /                                                          /|"
+	@echo "+----------------------------------------------------------+ |"
+	@echo "| Usage:                                                   | |"
+	@echo "| make build     -> build everthing                        | |"
+	@echo "|                                                          | |"
+	@echo "| make install   -> build_all + install (driver + examples)| |"
+	@echo "| make uninstall -> uninstall all                          | |"
+	@echo "|                                                          | |"
+	@echo "| make set_caps  -> set file capabilities (run as non-root)| |"
+	@echo "|                                                          | |"
+	@echo "| make get_external_repos -> get ALL git repos from below  | |"
+	@echo "| make schedtool          -> schedtool                     | |"
+	@echo "| make rt-app             -> rt-app                        | |"
+	@echo "| make rt-tests           -> rt-tests                      | |"
+	@echo "|                                                          | |"
+	@echo "| make clean     -> clean all dir/subdirs                  | +"
+	@echo "| make distclean -> complete cleanup                       |/ "
+	@echo "+----------------------------------------------------------+  "
 
-all: example1 example_gpio example_gpio2 example_swt_led
-	@echo "+-------------------------------------------+"
-	@echo "|           finished build                  |"
-	@echo "+-------------------------------------------+"
-
-example1: $(BASEFILES) example1.c tt_env.h
-	${CC} $(CFLAGS) -o example1 $(BASEFILES) example1.c $(LDLIBS)
-
-example_gpio: $(BASEFILES) example_gpio.c tt_env.h
-	${CC} $(CFLAGS) -o example_gpio $(BASEFILES) example_gpio.c $(LDLIBS)
-
-example_gpio2: $(BASEFILES) example_gpio2.c tt_env.h
-	${CC} $(CFLAGS) -o example_gpio2 $(BASEFILES) example_gpio2.c $(LDLIBS)
-
-example_swt_led: $(BASEFILES) example_swt_led.c tt_env.h
-	${CC} $(CFLAGS) -o example_swt_led $(BASEFILES) example_swt_led.c $(LDLIBS)
+build::
+	for dir in $(BUILD); do (cd $$dir && $(MAKE)); done
 
 clean::
-	rm -f *~ .*~ *.o *.i *.s *.so *.so.* *.a
-	rm -f example1
-	rm -f example_gpio
-	rm -f example_gpio2
-	rm -f example_swt_led
+	rm -f *~ .*~
 	for dir in $(MODULES); do (cd $$dir && $(MAKE) $@); done
 
+distclean::
+	rm -f *~ .*~
+	for dir in $(MODULES); do (cd $$dir && $(MAKE) $@); done
+
+install::
+	for dir in $(BUILD); do (cd $$dir && $(MAKE) $@); done
+	(./set_file_caps.sh)
+
+uninstall::
+	for dir in $(BUILD); do (cd $$dir && $(MAKE) $@); done
+
+set_caps::
+	@echo "Set caps to all binary"
+	(./set_file_caps.sh)
+
+get_external_repos::
+	(./scripts/get_external_git_repos.sh -p "https")
+
+get_schedtool:
+	(./scripts/get_external_git_repos.sh -r "schedtool" -p "https")
+
+get_rt-tests::
+	(./scripts/get_external_git_repos.sh -r "rt-tests" -p "https")
+
+get_rt-app::
+	(./scripts/get_external_git_repos.sh -r "rt-app" -p "https")

@@ -6,28 +6,56 @@ echo "|   Try to set file capabilities         |"
 echo "+----------------------------------------+"
 echo " "
 
-if [ -e example1 ]; then
-    sudo setcap "cap_sys_nice=pe" ./example1
+# ttenv_gpio
+if [ -e ./ttenv_gpio/ttenv_gpio ]; then
+    sudo setcap "cap_sys_nice=pe" ./ttenv_gpio/ttenv_gpio
 else
-    echo "example1 does not exist"
+    echo "./ttenv_gpio/ttenv_gpio does not exist"
 fi
 
-if [ -e example_gpio ]; then
-    sudo setcap "cap_sys_nice=pe" ./example_gpio
+if [ -e ${HOME}/bin/ttenv_gpio ]; then
+    sudo setcap "cap_sys_nice=pe" ${HOME}/bin/ttenv_gpio
 else
-    echo "example_gpio does not exist"
+    echo "${HOME}/bin/ttenv_gpio does not exist"
 fi
 
-if [ -e example_gpio2 ]; then
-    sudo setcap "cap_sys_nice=pe" ./example_gpio2
+# ttenv_gpio_simple
+if [ -e ./ttenv_gpio_simple/ttenv_gpio_simple ]; then
+    sudo setcap "cap_sys_nice=pe" ./ttenv_gpio_simple/ttenv_gpio_simple
 else
-    echo "example_gpio2 does not exist"
+    echo "./ttenv_gpio_simple/ttenv_gpio_simple does not exist"
 fi
 
-if [ -e example_swt_led ]; then
-    sudo setcap "cap_sys_nice=pe" ./example_swt_led
+if [ -e ${HOME}/bin/ttenv_gpio_simple ]; then
+    sudo setcap "cap_sys_nice=pe" ${HOME}/bin/ttenv_gpio_simple
 else
-    echo "example_swt_led does not exist"
+    echo "${HOME}/bin/ttenv_gpio_simple does not exist"
+fi
+
+# ttenv_simple
+if [ -e ./ttenv_simple/ttenv_simple ]; then
+    sudo setcap "cap_sys_nice=pe" ./ttenv_simple/ttenv_simple
+else
+    echo "./ttenv_simple/ttenv_simple does not exist"
+fi
+
+if [ -e ${HOME}/bin/ttenv_simple ]; then
+    sudo setcap "cap_sys_nice=pe" ${HOME}/bin/ttenv_simple
+else
+    echo "${HOME}/bin/ttenv_simple does not exist"
+fi
+
+# ttenv_swt_led
+if [ -e ./ttenv_swt_led/ttenv_swt_led ]; then
+    sudo setcap "cap_sys_nice=pe" ./ttenv_swt_led/ttenv_swt_led
+else
+    echo "./ttenv_swt_led/ttenv_swt_led does not exist"
+fi
+
+if [ -e ${HOME}/bin/ttenv_swt_led ]; then
+    sudo setcap "cap_sys_nice=pe" ${HOME}/bin/ttenv_swt_led
+else
+    echo "${HOME}/bin/ttenv_swt_led does not exist"
 fi
 
 echo " "

@@ -17,9 +17,12 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#include "tt_env.h"
+#include "libhelper.h"
 
-void
+#define LIBHELPER_EXPORT __attribute__ ((visibility ("default")))
+
+
+LIBHELPER_EXPORT void
 show_clock_resolution(void)
 {
 	struct timespec res;
@@ -30,14 +33,14 @@ show_clock_resolution(void)
 		perror("Can't get clock resolution");
 }
 
-void
+LIBHELPER_EXPORT void
 stack_prefault(size_t size)
 {
         unsigned char dummy[size * BASE_SAFE_SIZE];
         memset(dummy, 0, size * BASE_SAFE_SIZE);
 }
 
-int
+LIBHELPER_EXPORT int
 heap_prefault(size_t size)
 {
         unsigned char *dummy;
@@ -54,7 +57,7 @@ heap_prefault(size_t size)
 	return 0;
 }
 
-bool
+LIBHELPER_EXPORT bool
 check_for_rtpreempt()
 {
 	FILE *fd;
@@ -91,16 +94,16 @@ out:
 	return true;
 }
 
-int
+LIBHELPER_EXPORT int
 drop_capability(int hold_cap)
 {
 	capng_clear(CAPNG_SELECT_BOTH);
 
 	if (capng_update(CAPNG_ADD, CAPNG_EFFECTIVE | CAPNG_PERMITTED,
 			 hold_cap) != 0) {
-		printf("could not set capability -> %s\n",
-		       capng_print_caps_text(CAPNG_PRINT_STDOUT,
-					     CAPNG_EFFECTIVE));
+		eprintf("ERROR -> could not set capability -> %s\n",
+			capng_print_caps_text(CAPNG_PRINT_STDOUT,
+					      CAPNG_EFFECTIVE));
 		return -1;
 	}
 

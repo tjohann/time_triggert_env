@@ -17,106 +17,65 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#include "tt_env.h"
-
-#define DEV_NAME "/dev/gpio_driver"
-
-/* ioctl's */
-#define IOCTL_SET_WRITE_PIN 0x0001
-#define IOCTL_SET_READ_PIN  0x0002
-
-/* pin 273 */
-static int pin_500 = 273;
-static int fd_500;
-static int value_500;
-
-/* pin 275 */
-static int fd_750;
-static int value_750;
-
-/* common for both functions */
-static ssize_t n;
-static size_t len;
+#include "libttenv.h"
 
 static void
-init_example()
+function_1()
 {
-	fd_500 = open(DEV_NAME, O_WRONLY);
-	if (fd_500 == -1) {
-		perror("open");
-		exit(EXIT_FAILURE);
-	}
-
-	if(ioctl(fd_500, IOCTL_SET_WRITE_PIN, &pin_500) == -1) {
-		perror("ioctl");
-		exit(EXIT_FAILURE);
-	}
-
-	fd_750 = open(DEV_NAME, O_WRONLY);
-	if (fd_750 == -1) {
-		perror("open");
-		exit(EXIT_FAILURE);
-	}
-
-	len = sizeof(value_500);
+	printf("in function_1\n");
 }
 
 static void
-function_500()
+function_2()
 {
-	n = write(fd_500, &value_500, len);
-	if (n == -1)
-		perror("write");
-
-	if (value_500 == 1)
-		value_500 = 0;
-	else
-		value_500 = 1;
+	printf("in function_2\n");
 }
 
 static void
-function_750()
+function_3()
 {
-	n = write(fd_750, &value_750, len);
-	if (n == -1)
-		perror("write");
-
-	if (value_750 == 1)
-		value_750 = 0;
-	else
-		value_750 = 1;
+	printf("in function_3\n");
 }
 
 static void
-fiber_500 (void)
+function_4()
 {
-	function_500();
+	printf("in function_4\n");
 }
 
 static void
-fiber_750 (void)
+fiber_1 (void)
 {
-	function_750();
+	function_1();
+}
+
+static void
+fiber_2 (void)
+{
+	function_2();
+	function_2();
+	function_3();
+	function_4();
 }
 
 size_t num_fiber_elements = 2;
 fiber_element_t fiber_array[] =
 {
 	{
-		.func = fiber_500,
-		.sched_param = { .sched_priority = 90,
+		.func = fiber_1,
+		.sched_param = { .sched_priority = 89,
 		},
 		.cpu = 0,
 		.policy = SCHED_FIFO,
-		.dt = MS_TO_NS(500),
+		.dt = MS_TO_NS(10),
 	},
 	{
-		.func = fiber_750,
+		.func = fiber_2,
 		.sched_param = { .sched_priority = 90,
 		},
 		.cpu = 1,
-		.policy = SCHED_FIFO,
-		.dt = MS_TO_NS(750),
+		.policy = SCHED_RR,
+		.dt = MS_TO_NS(100),
 	}
 };
 
@@ -137,15 +96,13 @@ main(int argc, char *argv[])
 
 	if (build_sched_table(fiber_array, num_fiber_elements) != 0) {
 		printf("Could not build_sched_table\n");
-		exit (EXIT_FAILURE);
-	}
-
-	if (set_sched_props(fiber_array, num_fiber_elements) != 0) {
-		printf("Could not set sched prop\n");
 		exit(EXIT_FAILURE);
 	}
 
-	init_example();
+	if ( set_sched_props(fiber_array, num_fiber_elements) != 0) {
+		printf("Could not set sched prop\n");
+		exit(EXIT_FAILURE);
+	}
 
 	fflush(stdout);
 

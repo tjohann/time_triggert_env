@@ -17,8 +17,8 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 */
 
-#ifndef _TT_ENV_H_
-#define _TT_ENV_H_
+#ifndef _LIBHELPER_H_
+#define _LIBHELPER_H_
 
 #ifndef __USE_GNU
 #define __USE_GNU
@@ -60,66 +60,13 @@
 // libcap-ng
 #include <cap-ng.h>
 
-/*
- * common defines
- * -------------
- */
+#define eprintf(format, ...) fprintf (stderr, format, ##__VA_ARGS__)
 
 #define BASE_SAFE_SIZE 1024
-
-
-/*
- * common macros
- * -------------
- */
 
 #define MS_TO_NS(val) (val * 1000000)
 #define NSEC_PER_SEC 1000000000
 
-
-/*
- * common types
- * -------------
- */
-
-typedef struct {
-	pid_t kernel_tid;
-	pthread_t tid;
-	void (*func) (void);
-	struct sched_param sched_param;
-	struct timespec t;
-	int policy;
-	int cpu;
-	int dt;
-} fiber_element_t;
-
-
-/*
- * conf_sched.c
- * ============
- */
-
-/* see https://en.wikipedia.org/wiki/Fiber_%28computer_science%29 */
-void *
-fiber(void *arg);
-
-/* build table of functions for a fiber */
-int
-build_sched_table(fiber_element_t fiber_array[], int count);
-
-/* set scheduling properties of a fiber */
-int
-set_sched_props(fiber_element_t fiber_array[], int count);
-
-/* start a fiber -> wait for pthread_exit */
-int
-start_sched_table(fiber_element_t fiber_array[], int count);
-
-
-/*
- * helper.c
- * ========
- */
 
 /* show clock resolution */
 void

@@ -99,7 +99,7 @@ main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	if ( set_sched_props(fiber_array, num_fiber_elements) != 0) {
+	if (set_sched_props(fiber_array, num_fiber_elements) != 0) {
 		printf("Could not set sched prop\n");
 		exit(EXIT_FAILURE);
 	}

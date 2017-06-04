@@ -32,7 +32,7 @@
 *.dSYM/
 
 # my stuff
-example1
-example_gpio
-example_gpio2
-example_swt_led
+ttenv_gpio
+ttenv_gpio_simple
+ttenv_simple
+ttenv_swt_led

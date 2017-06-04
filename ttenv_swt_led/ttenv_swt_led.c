@@ -1,6 +1,6 @@
 /*
   GPL
-  (c) 2015-2016, thorsten.johannvorderbrueggen@t-online.de
+  (c) 2015-2017, thorsten.johannvorderbrueggen@t-online.de
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -76,7 +76,7 @@ init_example()
 static void
 function_swt()
 {
-	size_t n = read(fd_swt, &value_swt, len);
+	ssize_t n = read(fd_swt, &value_swt, len);
 	if (n == -1)
 		perror("read");
 
@@ -94,7 +94,7 @@ function_swt()
 static void
 function_750()
 {
-	size_t n = write(fd_750, &value_750, len);
+	ssize_t n = write(fd_750, &value_750, len);
 	if (n == -1)
 		perror("write");
 
